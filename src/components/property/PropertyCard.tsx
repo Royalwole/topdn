@@ -27,9 +27,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   status
 }) => {
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-NG', {
       style: 'currency',
-    currency: 'NGN', // Change currency to 'NGN'
+      currency: 'NGN', // Change currency to Naira
       maximumFractionDigits: 0,
     }).format(price);
   };

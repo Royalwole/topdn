@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { mockProperties } from '../data/mockProperties';
+import { useQuery } from 'react-query';
+import { api } from '../services/api';
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [activeImage, setActiveImage] = useState(0);
 
-  // Find the property from mock data
-  const property = mockProperties.find(p => p.id === id);
+  const { data: property, error, isLoading } = useQuery(['property', id], () => {
+    if (id) {
+      return api.getProperty(id);
+    }
+    throw new Error('Property ID is undefined');
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading property details.</div>;
 
   if (!property) {
     return (
@@ -22,7 +30,6 @@ const PropertyDetail = () => {
     );
   }
 
-  // Mock multiple images for the gallery
   const images = [
     property.imageUrl,
     'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c',

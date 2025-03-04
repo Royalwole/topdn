@@ -27,6 +27,17 @@ if ($requestUri[0] === 'properties') {
     if ($requestMethod === 'GET' && isset($requestUri[1])) {
         echo json_encode($inquiryController->getInquiriesByProperty($requestUri[1]));
     }
+} elseif ($requestUri[0] === 'properties' && $requestMethod === 'POST') {
+    // Create a new property
+    $data = json_decode(file_get_contents("php://input"), true);
+    echo json_encode($propertyController->createProperty($data));
+} elseif ($requestUri[0] === 'properties' && $requestMethod === 'PUT' && isset($requestUri[1])) {
+    // Update an existing property
+    $data = json_decode(file_get_contents("php://input"), true);
+    echo json_encode($propertyController->updateProperty($requestUri[1], $data));
+} elseif ($requestUri[0] === 'properties' && $requestMethod === 'DELETE' && isset($requestUri[1])) {
+    // Delete a property
+    echo json_encode($propertyController->deleteProperty($requestUri[1]));
 } else {
     http_response_code(404);
     echo json_encode(['message' => 'Not Found']);

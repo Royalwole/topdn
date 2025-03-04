@@ -27,10 +27,10 @@ const Properties = () => {
   const propertyTypes = ['Any Type', 'House', 'Apartment', 'Condo', 'Villa', 'Land'];
   const priceRanges = [
     { min: '', max: '', label: 'Any Price' },
-    { min: '0', max: '500000', label: 'Under $500,000' },
-    { min: '500000', max: '1000000', label: '$500,000 - $1M' },
-    { min: '1000000', max: '2000000', label: '$1M - $2M' },
-    { min: '2000000', max: '', label: '$2M+' },
+    { min: '0', max: '500000', label: 'Under ₦500,000' },
+    { min: '500000', max: '1000000', label: '₦500,000 - ₦1M' },
+    { min: '1000000', max: '2000000', label: '₦1M - ₦2M' },
+    { min: '2000000', max: '', label: '₦2M+' },
   ];
 
   return (
@@ -84,14 +84,14 @@ const Properties = () => {
                 </label>
                 <select
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  value={`${filters.priceMin}-${filters.priceMax}`}
+                  value={`₦{filters.priceMin}-₦{filters.priceMax}`}
                   onChange={(e) => {
                     const [min, max] = e.target.value.split('-');
                     setFilters({...filters, priceMin: min, priceMax: max});
                   }}
                 >
                   {priceRanges.map((range) => (
-                    <option key={range.label} value={`${range.min}-${range.max}`}>
+                    <option key={range.label} value={`₦{range.min}-₦{range.max}`}>
                       {range.label}
                     </option>
                   ))}
