@@ -19,7 +19,13 @@ class PropertyController {
 
     public function createProperty($data) {
         global $conn;
-        $stmt = $conn->prepare("INSERT INTO properties (title, description, price, address, city, state, bedrooms, bathrooms, area, type, status, agent_id, created_at, updated_at) VALUES (:title, :description, :price, :address, :city, :state, :bedrooms, :bathrooms, :area, :type, :status, :agent_id, NOW(), NOW())");
+
+        // Validate incoming data
+        if (empty($data['title']) || empty($data['description']) || empty($data['price'])) {
+            return ['error' => 'Title, description, and price are required.'];
+        }
+
+        $stmt = $conn->prepare("INSERT INTO properties (title, description, price, address, city, state, bedrooms, bathrooms, area, type, status, agent_id, created_at, updated_at, image_urls) VALUES (:title, :description, :price, :address, :city, :state, :bedrooms, :bathrooms, :area, :type, :status, :agent_id, NOW(), NOW(), :image_urls)");
         $stmt->bindParam(':title', $data['title']);
         $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':price', $data['price']);
@@ -32,6 +38,7 @@ class PropertyController {
         $stmt->bindParam(':type', $data['type']);
         $stmt->bindParam(':status', $data['status']);
         $stmt->bindParam(':agent_id', $data['agent_id']);
+        $stmt->bindParam(':image_urls', implode(',', $data['imageUrls'])); // Store image URLs as a comma-separated string
         $stmt->execute();
         return ['message' => 'Property created successfully', 'id' => $conn->lastInsertId()];
     }

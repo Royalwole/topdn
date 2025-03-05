@@ -1,23 +1,82 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios for making API calls
+import axios from 'axios';
 
-const CreateListing = () => {
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState(0);
-  const [description, setDescription] = useState('');
+// Define the shape of formData
+interface FormData {
+  imageUrls: string[];
+  title: string;
+  price: number;
+  description: string;
+}
+
+const CreateListing: React.FC = () => {
+  const [files, setFiles] = useState<File[]>([]);
+  const [formData, setFormData] = useState<FormData>({
+    imageUrls: [],
+    title: '',
+    price: 0,
+    description: '',
+  });
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [imageUploadError, setImageUploadError] = useState('');
+
+  const handleImageSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (files.length === 0) {
+      setImageUploadError('Please select at least one image');
+      return;
+    }
+    const formDataToSend = new FormData();
+    files.forEach(file => {
+      formDataToSend.append('images[]', file);
+    });
+    try {
+      setUploading(true);
+      const response = await axios.post('/api/upload', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setFormData(prev => ({
+        ...prev,
+        imageUrls: [...prev.imageUrls, ...response.data.imageUrls],
+      }));
+      setFiles([]);
+      setImageUploadError('');
+    } catch (err) {
+      setImageUploadError('Image upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      imageUrls: prev.imageUrls.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const response = await axios.post('/api/properties', { // API endpoint for creating a listing
-        title,
-        price,
-        description,
-      });
+      const response = await axios.post('/api/properties', formData);
       console.log('Listing created:', response.data);
-      // Optionally, redirect or show a success message
+      setError('');
     } catch (error) {
-      console.error('Error creating listing:', error);
+      setError('Error creating listing');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,17 +85,41 @@ const CreateListing = () => {
       <h2>Create New Listing</h2>
       <div>
         <label>Title:</label>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+        <input type="text" id="title" onChange={handleChange} required />
       </div>
       <div>
         <label>Price:</label>
-        <input type="number" value={price} onChange={(e) => setPrice(Number(e.target.value))} required />
+        <input type="number" id="price" onChange={handleChange} required />
       </div>
       <div>
         <label>Description:</label>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+        <textarea id="description" onChange={handleChange} required />
       </div>
-      <button type="submit">Create Listing</button>
+      <div>
+        <label>Images:</label>
+        <input type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
+        <button type="button" onClick={handleImageSubmit} disabled={uploading}>
+          {uploading ? 'Uploading...' : 'Upload Images'}
+        </button>
+      </div>
+      {formData.imageUrls.length > 0 && (
+        <div>
+          <h3>Uploaded Images</h3>
+          {formData.imageUrls.map((url, index) => (
+            <div key={index} style={{ display: 'flex', alignItems: 'center', margin: '10px 0' }}>
+              <img src={url} alt={`Uploaded image ${index + 1}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+              <button type="button" onClick={() => handleRemoveImage(index)} style={{ marginLeft: '10px' }}>
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      <button type="submit" disabled={loading}>
+        {loading ? 'Creating...' : 'Create Listing'}
+      </button>
+      {error && <p>{error}</p>}
+      {imageUploadError && <p>{imageUploadError}</p>}
     </form>
   );
 };
