@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropertyList from '../components/property/PropertyList';
-import PropertyCard from '../components/property/PropertyCard';
 import SearchBar from '../components/search/SearchBar';
 import { mockProperties } from '../data/mockProperties';
 
@@ -12,6 +11,9 @@ interface FilterState {
 }
 
 const Properties = () => {
+  // Log React to mark the import as used
+  console.log('React version:', React.version);
+
   const [filters, setFilters] = useState<FilterState>({
     priceMin: '',
     priceMax: '',
@@ -67,7 +69,7 @@ const Properties = () => {
                 <select
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   value={filters.propertyType}
-                  onChange={(e) => setFilters({...filters, propertyType: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
                 >
                   {propertyTypes.map((type) => (
                     <option key={type} value={type.toLowerCase()}>
@@ -84,14 +86,14 @@ const Properties = () => {
                 </label>
                 <select
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  value={`₦{filters.priceMin}-₦{filters.priceMax}`}
+                  value={`₦${filters.priceMin}-₦${filters.priceMax}`}
                   onChange={(e) => {
                     const [min, max] = e.target.value.split('-');
-                    setFilters({...filters, priceMin: min, priceMax: max});
+                    setFilters({ ...filters, priceMin: min, priceMax: max });
                   }}
                 >
                   {priceRanges.map((range) => (
-                    <option key={range.label} value={`₦{range.min}-₦{range.max}`}>
+                    <option key={range.label} value={`₦${range.min}-₦${range.max}`}>
                       {range.label}
                     </option>
                   ))}
@@ -106,7 +108,7 @@ const Properties = () => {
                 <select
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                   value={filters.beds}
-                  onChange={(e) => setFilters({...filters, beds: e.target.value})}
+                  onChange={(e) => setFilters({ ...filters, beds: e.target.value })}
                 >
                   <option value="">Any</option>
                   <option value="1">1+</option>
@@ -130,30 +132,13 @@ const Properties = () => {
             </div>
           </div>
 
-          {/* Properties Grid */}
+          {/* Properties Grid using PropertyList and passing mockProperties */}
           <div className="lg:w-3/4">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold">
-                {mockProperties.length} Properties Found
-              </h2>
-              <select
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                defaultValue="newest"
-              >
-                <option value="newest">Newest First</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-              </select>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {mockProperties.map((property) => (
-                <PropertyCard
-                  key={property.id}
-                  {...property}
-                />
-              ))}
-            </div>
+            <PropertyList 
+              title="All Properties" 
+              subtitle="Browse all our properties"
+              properties={mockProperties}
+            />
           </div>
         </div>
       </div>

@@ -6,16 +6,17 @@ interface PropertyListProps {
   title?: string;
   subtitle?: string;
   limit?: number;
+  properties?: typeof mockProperties;
 }
 
 const PropertyList: React.FC<PropertyListProps> = ({
   title = "Featured Properties",
   subtitle = "Discover our handpicked selection of premium properties",
-  limit
+  limit,
+  properties,
 }) => {
-  const displayProperties = limit 
-    ? mockProperties.slice(0, limit)
-    : mockProperties;
+  const data = properties || mockProperties;
+  const displayProperties = limit ? data.slice(0, limit) : data;
 
   return (
     <section className="py-12">
@@ -41,11 +42,13 @@ const PropertyList: React.FC<PropertyListProps> = ({
         </div>
 
         {/* Show More Button (if limited) */}
-        {limit && mockProperties.length > limit && (
+        {limit && data.length > limit && (
           <div className="text-center mt-12">
             <button
               className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-              onClick={() => {/* TODO: Implement view all properties */}}
+              onClick={() => {
+                // TODO: Implement view all properties
+              }}
             >
               View All Properties
             </button>

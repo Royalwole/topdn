@@ -1,9 +1,9 @@
 export const COMPANY_INFO = {
-  name: "TopDial Real Estate",
+  name: "Topdial Services",
   slogan: "Your Gateway to Exceptional Properties",
-  phone: "(555) 123-4567",
-  email: "contact@topdial.com",
-  address: "123 Luxury Avenue, Premium District",
+  phone: "+234 913 3833 2010",
+  email: "contact@Topdial.com",
+  address: "Lagos Nigeria",
   workingHours: "Mon - Sat: 9:00 AM - 6:00 PM"
 };
 
@@ -22,7 +22,7 @@ export const HERO_CONTENT = {
 };
 
 export const FEATURES = {
-  title: "Why Choose TopDial",
+  title: "Why Choose Topdial",
   subtitle: "Experience the difference of premium real estate services",
   items: [
     {
@@ -55,14 +55,14 @@ export const PLACEHOLDER_TEXT = {
 };
 
 export const SOCIAL_LINKS = {
-  facebook: "https://facebook.com/topdial",
-  instagram: "https://instagram.com/topdial",
-  twitter: "https://twitter.com/topdial",
-  linkedin: "https://linkedin.com/company/topdial"
+  facebook: "https://facebook.com/Topdial",
+  instagram: "https://instagram.com/Topdial",
+  twitter: "https://twitter.com/Topdial",
+  linkedin: "https://linkedin.com/company/Topdial"
 };
 
 export const FOOTER_CONTENT = {
-  about: "TopDial Real Estate specializes in premium properties, offering unparalleled service and expertise in luxury real estate markets.",
+  about: "Topdial Real Estate specializes in premium properties, offering unparalleled service and expertise in luxury real estate markets.",
   quickLinks: [
     { name: "Properties", path: "/properties" },
     { name: "About Us", path: "/about" },
@@ -75,11 +75,11 @@ export const FOOTER_CONTENT = {
     description: "Subscribe to receive the latest property listings and market insights",
     buttonText: "Subscribe"
   },
-  copyright: "© 2024 TopDial Real Estate. All rights reserved."
+  copyright: "© 2024 Topdial Real Estate. All rights reserved."
 };
 
 export const PLACEHOLDER_IMAGES = {
-  logo: "https://placehold.co/200x60?text=TopDial",
+  logo: "https://placehold.co/200x60?text=Topdial",
   hero: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3",
   property: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3",
   agent: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3",
