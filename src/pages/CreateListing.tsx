@@ -68,6 +68,10 @@ const CreateListing: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.title || !formData.description || !formData.price || formData.imageUrls.length === 0) {
+      setError('All fields are required, including at least one image.');
+      return;
+    }
     setLoading(true);
     try {
       const response = await axios.post('/api/properties', formData);
@@ -81,24 +85,24 @@ const CreateListing: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="create-listing-form">
       <h2>Create New Listing</h2>
       <div>
         <label>Title:</label>
-        <input type="text" id="title" onChange={handleChange} required />
+        <input type="text" id="title" onChange={handleChange} required className="form-input" />
       </div>
       <div>
         <label>Price:</label>
-        <input type="number" id="price" onChange={handleChange} required />
+        <input type="number" id="price" onChange={handleChange} required className="form-input" />
       </div>
       <div>
         <label>Description:</label>
-        <textarea id="description" onChange={handleChange} required />
+        <textarea id="description" onChange={handleChange} required className="form-textarea" />
       </div>
       <div>
         <label>Images:</label>
-        <input type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
-        <button type="button" onClick={handleImageSubmit} disabled={uploading}>
+        <input type="file" multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} className="form-file" />
+        <button type="button" onClick={handleImageSubmit} disabled={uploading} className="upload-button">
           {uploading ? 'Uploading...' : 'Upload Images'}
         </button>
       </div>
@@ -115,11 +119,11 @@ const CreateListing: React.FC = () => {
           ))}
         </div>
       )}
-      <button type="submit" disabled={loading}>
+      <button type="submit" disabled={loading} className="create-button">
         {loading ? 'Creating...' : 'Create Listing'}
       </button>
-      {error && <p>{error}</p>}
-      {imageUploadError && <p>{imageUploadError}</p>}
+      {error && <p className="error">{error}</p>}
+      {imageUploadError && <p className="error">{imageUploadError}</p>}
     </form>
   );
 };
